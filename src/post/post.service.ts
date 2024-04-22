@@ -1,10 +1,10 @@
 /**
  *
  */
+import { CreaetPostDto } from '@/post/dto/create-post.dto';
+import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Post } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreaetPostDto } from './dto/create-post.dto';
 
 @Injectable()
 export class PostService {

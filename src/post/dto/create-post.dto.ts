@@ -1,7 +1,7 @@
 /**
  *
  */
-import { $Enums, PostType } from '@prisma/client';
+import { PostType } from '@prisma/client';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreaetPostDto {

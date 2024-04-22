@@ -1,20 +1,29 @@
 /**
  *
  */
-import {
-    BadRequestException,
-    Injectable
-} from '@nestjs/common';
+import { SignInDto } from '@/auth/dto/siginin.dto';
+import { SignUpDto } from '@/auth/dto/signup.dto';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { SignUpDto } from './dto/signup.dto';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly prisma: PrismaService) {}
 
-    signIn(): void {}
+    async signIn(signInDto: SignInDto): Promise<boolean> {
+        const { id, password } = signInDto;
+        const user: User = await this.prisma.user.findUnique({
+            where: { id },
+        });
+
+        if (user && await bcrypt.compare(password, user.password)) {
+            return true;
+        } else {
+            throw new UnauthorizedException('login failed')
+        }
+    }
 
     async signUp(signUpDto: SignUpDto): Promise<User> {
         const { id, password, type } = signUpDto;
