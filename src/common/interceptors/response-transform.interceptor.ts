@@ -5,7 +5,7 @@ import { BadRequestException, CallHandler, ExecutionContext, Injectable, NestInt
 import { Reflector } from '@nestjs/core';
 import { ResponseMessage } from 'common/decorators/response-message';
 import { ResponseDto } from 'common/dto/response.dto';
-import { Observable } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
@@ -16,8 +16,10 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, Respo
         const status = context.switchToHttp().getResponse().statusCode;
         const message = this.reflector.get(ResponseMessage, context.getHandler());
 
+        console.log('interceptor ResponseTransformInterceptor before');
         return next.handle().pipe(
             map((data) => {
+                console.log('interceptor ResponseTransformInterceptor after');
                 return {
                     message: message || 'success',
                     status: status || 200,
